@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +21,22 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+
+Route::get('/login/admin', [LoginController::class, 'showAdminLogin']);
+
+Route::get('/register/admin', [RegisterController::class, 'showAdmin']);
+
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::post('/login/admin', [LoginController::class, 'adminLogin']);
+
+Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
+
+
+Route::group(['middleware' => 'auth:admin'], function () {
+
+    Route::view('/admin', 'admin');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
